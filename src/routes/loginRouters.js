@@ -2,6 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import bcrypt from 'bcrypt';
+import config from '../config/config.js';
 
 const router = express.Router();
 
@@ -52,7 +53,7 @@ router.post('/', async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id }, config.jwtSecret, { expiresIn: '1h' });
     res.json({ token });
   } catch (error) {
     console.error(error);

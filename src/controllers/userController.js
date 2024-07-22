@@ -1,31 +1,24 @@
 // src/controllers/userController.js
 
-import User from '../models/user.js';
-import bcrypt from 'bcrypt';
+import UserService from '../services/userService.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
+const userService = new UserService(); 
 
-const getAllUsers = async (req, res) => {
+const findAll = async (req, res) => {
   try {
-    const users = await User.findAll();
-    const usersWithoutPass = users.map( user => {
-      const {password, ...usersWithoutPass} = user.dataValues;
-      return usersWithoutPass;
-    });
-
-    res.json(usersWithoutPass);
+    const users = await userService.findAll();
+    res.json(users);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro ao buscar usuários' });
   }
 };
 
-const getUserById = async (req, res) => {
-  const userId = req.params.id;
-
+const findById = async (req, res) => {
   try {
-    const user = await User.findByPk(userId); 
+    const user = await userService.findById(req.params.id); 
     if (user) {
       res.json(user);
     } else {
@@ -39,18 +32,10 @@ const getUserById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { name, email, password, nascimento } = req.body;
-    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUND));    
-    
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      nascimento,
-    });
-
-    const { password: _, ...userWithoutPassword } = user.dataValues;
-    res.status(201).json(userWithoutPassword); 
+    const { name, email, password, nascimento } = req.body; 
+    const user = { name: name, email: email, password: password, nascimento: nascimento };
+    const userCreated = await userService.create(user);
+    res.status(201).json(userCreated); 
     
   } catch (error) {
     if (error.name === 'SequelizeValidationError') { 
@@ -66,5 +51,5 @@ const create = async (req, res) => {
   }
 };
 
-export { getAllUsers, getUserById, create };
+export { findAll, findById, create };
 

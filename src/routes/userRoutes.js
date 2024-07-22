@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, getUserById, create } from '../controllers/userController.js';
+import { findById, create, findAll } from '../controllers/userController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -21,7 +21,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get('/', authMiddleware, getAllUsers);
+router.get('/', authMiddleware, findAll);
 
 /**
  * @swagger
@@ -71,6 +71,6 @@ router.post('/', create);
  *       404:
  *         description: Usuário não encontrado
  */
-router.get('/:id', getUserById);
+router.get('/:id', findById);
 
 export default router;
