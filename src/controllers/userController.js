@@ -5,7 +5,12 @@ import User from '../models/user.js';
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
-    res.json(users);
+    const usersWithoutPass = users.map( user => {
+      const {password, ...usersWithoutPass} = user.dataValues;
+      return usersWithoutPass;
+    });
+
+    res.json(usersWithoutPass);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro ao buscar usuários' });
