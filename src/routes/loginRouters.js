@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -43,16 +44,14 @@ router.post('/', async (req, res) => {
   try {
     const user = await User.findOne({ where: { email } });
 
-    console.log(user);
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    // if (!user) {
-    //   return res.status(401).json({ error: 'Credenciais inválidas' });
-    // }
-    // const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    // if (!isPasswordValid) {
-    //   return res.status(401).json({ error: 'Credenciais inválidas' });
-    // }
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
   } catch (error) {

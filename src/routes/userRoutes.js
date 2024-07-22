@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /users:
+ * /user:
  *   get:
  *     summary: Retorna a lista de usuários
  *     security:
@@ -49,7 +49,7 @@ router.post('/', create);
 
 /**
  * @swagger
- * /users/{id}:
+ * /user/{id}:
  *   get:
  *     summary: Retorna um usuário pelo ID
  *     security:

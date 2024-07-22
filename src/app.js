@@ -5,18 +5,25 @@ import initializeDatabase from '../initDatabase.js';
 import swaggerConfig from './config/openapiSwagger.js';
 import errorHandler from './middlewares/errorHandler.js';
 import routes from './routes/routes.js';
+import corsMiddleware from './middlewares/corsMiddleware.js';
+import cors from 'cors';
 
 const app = express();
 
 dotenv.config();
 
+//Config
 app.use(express.json());
+app.use(cors({origin: '*',}));
 
+// Rotas
 app.use(routes);
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
+//middleware
 app.use(errorHandler);
+app.use(corsMiddleware);
+
 
 const PORT = process.env.PORT || 3000;
 

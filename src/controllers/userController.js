@@ -40,7 +40,7 @@ const getUserById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const { name, email, password, nascimento } = req.body;
-    const hashedPassword = bcrypt.hash(password, process.env.SALT_ROUND);    
+    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUND));    
     
     const user = await User.create({
       name,
@@ -53,14 +53,17 @@ const create = async (req, res) => {
     res.status(201).json(userWithoutPassword); 
     
   } catch (error) {
-    const validationErrors = error.errors.map(err => ({
-      field: err.path,
-      message: err.message,
-    }));
-    return res.status(400).json({ errors: validationErrors });
+    if (error.name === 'SequelizeValidationError') { 
+      const validationErrors = error.errors.map(err => ({
+        field: err.path,
+        message: err.message,
+      }));
+      return res.status(400).json({ errors: validationErrors });
+    } else {
+      console.error(error);
+      res.status(500).json({ error: 'Erro ao criar usuário' });
+    }
   }
-  console.error(error);
-  res.status(500).json({ error: 'Erro ao criar usuário' });
 };
 
 export { getAllUsers, getUserById, create };

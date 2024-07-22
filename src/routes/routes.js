@@ -9,6 +9,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/login', loginRoutes);
-router.use('/users', userRoutes);
+router.use('/user', userRoutes);
 
 export default router;
