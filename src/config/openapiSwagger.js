@@ -19,9 +19,10 @@ const options = {
           type: 'object',
           properties: {
             id: { type: 'integer', description: 'ID do usuário' },
-            name: { type: 'string', description: 'Nome do usuário'  },
-            email: { type: 'string', description: 'Email de autenticação do usuário'  },
-            password: { type: 'string', description: 'Senha do usuário', writeOnly: true  },
+            name: { type: 'string', description: 'Nome do usuário' },
+            email: { type: 'string', description: 'Email de autenticação do usuário' },
+            password: { type: 'string', description: 'Senha do usuário', writeOnly: true },
+            nascimento: { type: 'string', description: 'Data de Nascimento', format: 'date', example: '2000-01-01' },
           },
         },
       },

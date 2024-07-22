@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, getUserById } from '../controllers/userController.js';
+import { getAllUsers, getUserById, create } from '../controllers/userController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -22,6 +22,30 @@ const router = express.Router();
  *                 $ref: '#/components/schemas/User'
  */
 router.get('/', authMiddleware, getAllUsers);
+
+/**
+ * @swagger
+ * /user:
+ *   post:
+ *     summary: Cria um novo usuário
+ *     requestBody: 
+ *       description: Dados do novo usuário
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User' 
+ *     responses:
+ *       201:
+ *         description: Usuário criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Erro de validação
+ */
+router.post('/', create);
 
 /**
  * @swagger
