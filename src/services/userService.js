@@ -1,6 +1,7 @@
-import UserRepository from '../repositories/userRepository.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import config from '../config/config.js';
+import UserRepository from '../repositories/userRepository.js';
 
 class UserService {
 
@@ -25,6 +26,25 @@ class UserService {
 
   async findById(id) {
     return await this.userRepository.findById(id);
+  }
+
+  async findOne(condition) {
+    return await this.userRepository.findOne(condition);
+  }
+
+  async login(email, password) {
+    const user =  await this.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    return jwt.sign({ userId: user.id }, config.jwtSecret, { expiresIn: '1h' });
   }
 
 }

@@ -1,17 +1,14 @@
-import dotenv from 'dotenv';
+import cors from 'cors';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import initializeDatabase from '../initDatabase.js';
+import config from './config/config.js';
 import swaggerConfig from './config/openapiSwagger.js';
+import corsMiddleware from './middlewares/corsMiddleware.js';
 import errorHandler from './middlewares/errorHandler.js';
 import routes from './routes/routes.js';
-import corsMiddleware from './middlewares/corsMiddleware.js';
-import cors from 'cors';
-import config from './config/config.js';
 
 const app = express();
-
-dotenv.config();
 
 //Config e Middleware
 app.use(express.json());

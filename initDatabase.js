@@ -5,7 +5,7 @@ async function initializeDatabase() {
   try {
     await sequelize.authenticate();
     console.log('Conexão com o banco de dados estabelecida com sucesso.');
-    await User.sync({ alter: true });
+    await User.sync();
     console.log('Tabela User sincronizada com sucesso.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);

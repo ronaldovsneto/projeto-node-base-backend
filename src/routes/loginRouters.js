@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import bcrypt from 'bcrypt';
 import config from '../config/config.js';
+import { login } from '../controllers/loginController.js';
 
 const router = express.Router();
 
@@ -40,25 +41,6 @@ const router = express.Router();
  *       401:
  *         description: Não autorizado - Credenciais inválidas
  */
-router.post('/', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ where: { email } });
-
-    if (!user) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
-    }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
-    }
-    const token = jwt.sign({ userId: user.id }, config.jwtSecret, { expiresIn: '1h' });
-    res.json({ token });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro no servidor' });
-  }
-});
+router.post('/', login);
 
 export default router;

@@ -1,9 +1,7 @@
 // src/controllers/userController.js
 
 import UserService from '../services/userService.js';
-import dotenv from 'dotenv';
 
-dotenv.config();
 const userService = new UserService(); 
 
 const findAll = async (req, res) => {

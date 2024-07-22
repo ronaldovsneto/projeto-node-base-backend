@@ -2,8 +2,6 @@
 import { Sequelize } from 'sequelize';
 import config from './config.js';
 
-console.log('Teste Config: ', config);
-
 const sequelize = new Sequelize(
   config.database, 
   config.username, 
