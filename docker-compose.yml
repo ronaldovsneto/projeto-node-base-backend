@@ -4,7 +4,7 @@ services:
   api:
     build: .
     ports:
-      - "${PORT}:3000"
+      - "${PORT}:${PORT}" #container:host
     depends_on:
       - db
     env_file:
@@ -18,7 +18,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=iteam
     ports:
-      - "3307:3306"
+      - "3307:3306" #container:host
     volumes:
       - mysql_data:/var/lib/mysql
   
