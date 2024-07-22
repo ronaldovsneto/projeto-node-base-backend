@@ -4,15 +4,11 @@ services:
   api:
     build: .
     ports:
-      - "3000:3000"
+      - "${PORT}:3000"
     depends_on:
       - db
-    environment:
-      - DB_HOST=db
-      - DB_USER=root
-      - DB_PASSWORD=root
-      - DB_NAME=iteam
-      - JWT_SECRET=123456
+    env_file:
+      - .env
   
   db:
     image: mariadb:10.4.28
